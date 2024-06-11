@@ -141,10 +141,51 @@ const getProductDetails = async (req, res) => {
     }
 }
 
+const markAsFavourite = async (req, res) => {
+    try {
+        // Check the data is available
+        const is_available = await Products.findOne({_id: req.headers.id});
+
+        if(!is_available){
+            return res.status(200).json({message: 'Please check your id.'});
+        }
+
+        // Set favourite to "1", default value is "0"
+        await Products.updateOne({_id: req.headers.id}, {
+            $set: {
+                isFavourite : 1
+            }
+        }).then(async result => {
+            const all_products = await Products.find();
+
+            if (result.modifiedCount > 0) {
+                res.status(200).json(
+                    {
+                        message: 'Data updated successfully',
+                        data: all_products
+                    });
+            } else {
+                res.status(500).json(
+                    {
+                        message: 'Try Again!',
+                        data: ""
+                    });
+            }
+        }).catch(error => {
+            console.log(error);
+            res.status(500).json({error: error});
+        })
+
+    } catch (e) {/*JSON*/
+        return res.status(500).json({error: e});
+    }
+}
+
 module.exports = {
     saveProducts,
     getAllProducts,
     deleteProduct,
     editProduct,
-    getProductDetails
+    getProductDetails,
+    markAsFavourite
 }

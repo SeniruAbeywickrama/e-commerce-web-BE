@@ -3,16 +3,18 @@ const productController =  require('../controller/productController');
 
 const router = express.Router();
 
-//post (save) [body]
+// Add products to the db
 router.post('/add-product', productController.saveProducts);
-//get(fetch) [headers]
+// Get details of all the projects
 router.get('/get-all-products', productController.getAllProducts);
-// Get product details
+// Get details on one product using product id
 router.get('/get-product-details', productController.getProductDetails);
-//delete(delete) [headers]
+// Delete product using id
 router.delete('/delete-product', productController.deleteProduct);
-//PUT(Update) [Body]
+// Update product details
 router.put('/edit-product', productController.editProduct);
+// Mark as a favourite
+router.put('/mark-as-favourite', productController.markAsFavourite)
 
 
 module.exports = router;
